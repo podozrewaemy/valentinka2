@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Валентинка</title>
+    <style>
+        body {
+            background-color: pink;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid darkred;
+        }
+        h1 {
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="valentine" width=400 height=400></canvas>
+    <h1>I love you</h1>
+    <script>
+        const canvas = document.getElementById('valentine');
+        const ctx = canvas.getContext('2d');
+
+        function drawHeart(size, x_center, y_center) {
+            ctx.beginPath();
+            const steps = 200; // Увеличиваем число точек для большей гладкости
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps * Math.PI * 2; // Полный круг (0 до 2π)
+                const x = size * 16 * Math.pow(Math.sin(t), 3);
+                const y = -size * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+                if (i === 0) {
+                    ctx.moveTo(x + x_center, y + y_center); // Начальная точка
+                } else {
+                    ctx.lineTo(x + x_center, y + y_center); // Соединяем точки
+                }
+            }
+            ctx.closePath(); // Закрываем путь
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.strokeStyle = 'darkred';
+            ctx.stroke();
+        }
+
+        let size = 10;
+        let direction = 0.1;
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем холст
+            drawHeart(size, 200, 200); // Рисуем сердце
+            size += direction; // Изменяем размер
+            if (size >= 12 || size <= 8) {
+                direction *= -1; // Меняем направление пульсации
+            }
+            requestAnimationFrame(animate); // Запускаем следующий кадр
+        }
+
+        animate(); // Запускаем анимацию
+    </script>
+</body>
+</html>
